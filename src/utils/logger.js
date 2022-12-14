@@ -10,8 +10,6 @@ const logger = winston.createLogger({
             )
         }
     )],
-    prettyPrint: true
   });
   
-  module.exports = logger;
-
+module.exports = logger;

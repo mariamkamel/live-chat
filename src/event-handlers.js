@@ -1,15 +1,16 @@
-const logger = require('./utils')
+const logger = require('./utils/logger')
+const configs = require('./utils/configs')
 
 let users = new Map()
-const room = 'Room207'
+
 const join = (socket) => {
-    socket.on('join', (name) => {
-        if(users.size === 4) {
+    socket.on(configs.join, (name) => {
+        if(users.size === configs.roomCapacity) {
             logger.error('cannot join room room,  capacity is full ')
             return;
         }
 
-        socket.join(room)
+        socket.join(configs.room)
         users.set(socket.id, name)
 
         logger.info(`${name} joined the room`)
@@ -17,19 +18,19 @@ const join = (socket) => {
 }
 
 const sendMessage = (socket) => {
-    socket.on('send message', (msg) => {
+    socket.on(configs.sendMessage, (msg) => {
         if(!users.has(socket.id)) {
         logger.error('cannot send, only users in the room can send messsages')
         return;
     }
 
     logger.info(`${users.get(socket.id)} sent a new message`)
-    socket.broadcast.emit("received", msg);
+    socket.broadcast.emit(configs.receiveMessage, msg);
 })
 }
 
 const disconnect = (socket) => {
-    socket.on('disconnect', () => {
+    socket.on(configs.disconnect, () => {
         logger.info(`${users.get(socket.id)} is disconnected`)
         users.delete(socket.id)
     })
