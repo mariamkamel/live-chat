@@ -18,7 +18,6 @@ const io = new Server(server, {
 io.on(config.connection, (socket) => {
   logger.info("new connection started")
   join(socket);
-  sendMessage(socket);
   disconnect(socket)
 });
 
