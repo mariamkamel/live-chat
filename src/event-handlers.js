@@ -12,7 +12,7 @@ const join = (socket) => {
 
         socket.join(configs.room)
         users.set(socket.id, name)
-
+        
         logger.info(`${name} joined the room`)
       })    
 }
@@ -25,7 +25,7 @@ const sendMessage = (socket) => {
     }
 
     logger.info(`${users.get(socket.id)} sent a new message`)
-    socket.broadcast.emit(configs.receiveMessage, msg);
+    socket.to(configs.room).emit(configs.receiveMessage,  msg );
 })
 }
 
